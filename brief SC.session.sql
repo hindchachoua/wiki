@@ -89,5 +89,3 @@ RENAME TABLE Authors TO users;
 --@block
 ALTER TABLE users
 ADD COLUMN role enum('admin', 'auteur', 'visiteur');
-
-
