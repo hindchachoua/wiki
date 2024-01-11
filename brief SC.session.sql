@@ -89,3 +89,52 @@ RENAME TABLE Authors TO users;
 --@block
 ALTER TABLE users
 ADD COLUMN role enum('admin', 'auteur', 'visiteur');
+
+--@block
+INSERT INTO categories (category_name)
+VALUES ('Technology'),
+    ('Nature'),
+    ('Art');
+
+--@block
+INSERT INTO tags (tag_name)
+VALUES ('Programming'),
+    ('Science'),
+    ('Painting'),
+    ('Web');
+
+--@block
+INSERT INTO wikis (title, content, author_id, category_id,creation_date, is_archived)
+VALUES (
+        'Introduction to Programming',
+        'A beginner-friendly guide to programming concepts.',
+        2,
+        7,
+        NOW(),
+        0
+    ),
+    (
+        'The Wonders of Nature',
+        'Explore the beauty and mysteries of nature.',
+        2,
+        8,
+        NOW(),
+        0
+    ),
+    (
+        'Masterpieces in Art',
+        'Discover timeless masterpieces from various artists.',
+        2,
+        9,
+        NOW(),
+        0
+    );
+
+--@block
+INSERT INTO wiki_tags (wiki_id, tag_id)
+VALUES (10, 1),
+    (10, 4),
+    (11, 2),
+    (11, 4),
+    (12, 3),
+    (12, 4);
