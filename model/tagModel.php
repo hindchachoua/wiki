@@ -1,15 +1,18 @@
 <?php
 
-include "connection\conn.php";
+// include_once "connection\conn.php";
+
 
 class tag{
 
     private $tag_id;
     private $tag_name;
+    private $created_at;
 
-    public function __construct($tag_id, $tag_name){
+    public function __construct($tag_id, $tag_name, $created_at){
         $this->tag_id = $tag_id;
         $this->tag_name = $tag_name;
+        $this->created_at = $created_at;
     }
 
     
@@ -29,10 +32,14 @@ class tag{
     {
         return $this->tag_name;
     }
+    public function getCreated_at()
+    {
+        return $this->created_at;
+    }
 }
 
 
-class tagModel{
+class tagDAO{
 
     private $db;
 
@@ -49,7 +56,7 @@ class tagModel{
         $result = array();
 
         foreach($resultdata as $row){
-            $result[] = new tag($row['tag_id'], $row['tag_name']);
+            $result[] = new tag($row['tag_id'], $row['tag_name'], $row['created_at']);
         }
         return $result;
     }
@@ -64,7 +71,7 @@ class tagModel{
 
         $tags = array();
         foreach ($tagsdata as $tag) {
-            $tags[] = new tag($tag['tag_id'], $tag['tag_name']);
+            $tags[] = new tag($tag['tag_id'], $tag['tag_name'], $tag['created_at']);
         }
         return $tags;
     }
@@ -78,7 +85,7 @@ class tagModel{
         $stmt->execute();
         $resultdata = $stmt->fetch();
         foreach($resultdata as $data){
-            $result = new tag($data['tag_id'], $data['tag_name']);
+            $result = new tag($data['tag_id'], $data['tag_name'] , $data['created_at']);
         }
         return $result;
     }
@@ -109,6 +116,42 @@ class tagModel{
         $stmt->bindParam(':tag_id', $tag_id);
         $stmt->execute();
     }
+
+    public function getLatestTags($limit = 5)
+    {
+        $query = "SELECT * FROM tags ORDER BY created_at DESC LIMIT " . (int) $limit;
+
+        $stmt = $this->db->prepare($query);
+
+        $tags = [];
+        foreach ($stmt as $tagData) {
+            $tags[] = new Tag(
+                $tagData['tag_id'],
+                $tagData['tag_name'],
+                $tagData['created_at']
+            );
+        }
+
+        return $tags;
+    }
+    public function getTagCount()
+{
+    $sql = "SELECT COUNT(*) as count FROM tags";
+    $stmt = $this->db->prepare($sql);
+
+    if ($stmt->execute()) {
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (object)['count' => $result['count'] ?? 0];
+    } else {
+        // Handle the case where execution fails (perhaps log an error or return an error object)
+        return (object)['count' => 0];
+    }
+}
+
+
+    /**
+     * Get the value of created_at
+     */ 
 
 }
 

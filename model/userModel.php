@@ -1,6 +1,7 @@
 <?php 
 
-require_once("../connection/conn.php");
+// require_once "connection\conn.php";
+
 
 class user{
     private $author_id;
@@ -78,6 +79,17 @@ class userDAO{
             $results[] = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date']);
         }
         return $results;
+    }
+
+    public function getUserByEmail($email){
+        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $stmt = $this->db->query($sql);
+        $stmt->execute();
+        $resultdata = $stmt->fetchAll();
+        foreach($resultdata as $data){
+            $result = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date']);
+        }
+        return $result;
     }
 
     public function getuserbyid($id){

@@ -1,6 +1,7 @@
 <?php
 
-require_once ("../connection/conn.php");
+// include_once "connection\conn.php";
+
 
 class category{
 
@@ -56,7 +57,7 @@ class categoryDAO{
         $results =array();
 
         foreach($resultdata as $row){
-            $results[] = new category($row['category_id'], $row['category_name'], $row['description']);
+            $results[] = new category($row['category_id'], $row['category_name'], $row['description'], $row['created_at']);
         }
         return $results;
     }
@@ -98,6 +99,35 @@ class categoryDAO{
         $stmt->bindParam(':category_id', $category_id);
         $stmt->execute();
     }
+
+// last categorie
+    public function getLatestCategories($limit = 5){
+        $sql = "SELECT * FROM categories ORDER BY created_at DESC LIMIT $limit";
+        $result = $this->db->query($sql);
+
+        $categories = [];
+        foreach($result as $row){
+            $categories[] = new category(
+                $row['category_id'], 
+                $row['category_name'], 
+                $row['description'], 
+                $row['created_at']);
+        }
+        return $result;
+    }
+
+
+
+
+    public function getCategoryCount(){
+        $sql = "SELECT COUNT(*) as count FROM categories";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        return (object)['count' => $result['count'] ?? 0];
+    }
+    
 }
 
 // $obj = new categoryDAO();
