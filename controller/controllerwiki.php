@@ -1,4 +1,5 @@
 <?php
+include_once 'model\wikiModel.php';
 
 class WikiController
 {
@@ -18,14 +19,14 @@ class WikiController
         $tags = $this->wikiDAO->getTagsByWikiId($wikiId);
         $wiki = $wikiDAO->getWikiById($wikiId);
 
-        include_once 'app/views/wiki/SingleWikiPage.php';
+        include_once 'view\wiki\SingleWikiPage.php';
     }
     public function adminIndex()
     {
         $wikiDAO = new WikiDAO();
         $wikis = $wikiDAO->getAllWikisForCrud();
 
-        include 'app/views/wiki/crud/admin_index.php';
+        include 'view\wiki\crud\admin_index.php';
     }
     public function authorIndex()
     {
