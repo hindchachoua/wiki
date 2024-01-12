@@ -116,28 +116,35 @@ class wikiDAO{
     }
 
 
-public function getwikibycategoryid($id){
-
-    $sql = "SELECT * FROM wikis WHERE category_id = $id";
-    $stmt = $this->db->query($sql);
-    $stmt->execute();
-    $resultdata = $stmt->fetchAll();
-    $results = array();
-
-    foreach($resultdata as $row){
-        $results[] = new wiki(
-            $row['wiki_id'], 
-            $row['title'], 
-            $row['content'], 
-            $row['author_id'], 
-            $row['category_id'], 
-            $row['creation_date'], 
-            $row['is_archived']);
-    }
-    return $results;
-
+    public function getwikibycategoryid($id) {
+        // Check if $id is not NULL and is a valid integer
+        if ($id !== null && filter_var($id, FILTER_VALIDATE_INT) !== false) {
+            $sql = "SELECT * FROM wikis WHERE category_id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $resultdata = $stmt->fetchAll();
+            $results = array();
     
-}
+            foreach($resultdata as $row){
+                $results[] = new wiki(
+                    $row['wiki_id'], 
+                    $row['title'], 
+                    $row['content'], 
+                    $row['author_id'], 
+                    $row['category_id'], 
+                    $row['creation_date'], 
+                    $row['is_archived']);
+            }
+    
+            return $results;
+        } else {
+            // Handle the case where $id is NULL or not a valid integer
+            // You can throw an exception, log an error, or return an appropriate response
+            return array();
+        }
+    }
+    
 
 public function getAllWikisForCrud(){
 
@@ -168,7 +175,7 @@ public function getAllWikisForCrud(){
 
 public function getLatestWikis($limit = 5)
 {
-    $query = "SELECT * FROM wikis WHERE is_archived = 0 ORDER BY created_at DESC LIMIT $limit" ;
+    $query = "SELECT * FROM wikis WHERE is_archived = 0 ORDER BY creation_date DESC LIMIT $limit" ;
     $wikisData = $this->db->query($query);
 
     $wikis = [];
@@ -199,7 +206,7 @@ public function getTagsByWikiId($wikiId)
         $result = $stmt->fetchAll();
         $tags = [];
         foreach ($result as $row) {
-            $tags[] = new Tag($row['tag_id'], $row['tag_name'], $row['created_at']);
+            $tags[] = new Tag($row['tag_id'], $row['tag_name'], $row['creation_date']);
         }
         return $tags;
 
@@ -222,7 +229,7 @@ public function getTagsByWikiId($wikiId)
             $result['content'],
             $result['user_id'],
             $result['category_id'],
-            $result['created_at'],
+            $result['creation_date'],
             $result['is_archived']
         );
 
@@ -257,17 +264,29 @@ public function getTagsByWikiId($wikiId)
 //     return $wikis;
 // }
 
-    public function getwikibyid ($id){
+ public function getwikibyid ($id){
+    $sql = "SELECT * FROM wikis WHERE wiki_id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
 
-        $sql = "SELECT * FROM wikis WHERE wiki_id = $id";
-        $stmt = $this->db->query($sql);
-        $stmt->execute();
-        $resultdata = $stmt->fetchAll();
-        foreach($resultdata as $row){
-            $result = new wiki($row['wiki_id'], $row['title'], $row['content'], $row['author_id'], $row['category_id'], $row['creation_date'], $row['is_archived']);
-        }
-        return $result;
+    $resultdata = $stmt->fetchAll();
+    $result = null; // Initialize $result
+
+    foreach($resultdata as $row){
+        $result = new wiki(
+            $row['wiki_id'], 
+            $row['title'], 
+            $row['content'], 
+            $row['author_id'], 
+            $row['category_id'], 
+            $row['creation_date'], 
+            $row['is_archived']);
     }
+
+    return $result;
+}
+
 
     public function insertwiki($title, $content, $author_id, $category_id, $creation_date, $is_archived){
 
@@ -372,7 +391,7 @@ public function searchWikisByQuery($query)
             $result['content'],
             $result['user_id'],
             $result['category_id'],
-            $result['created_at'],
+            $result['creation_date'],
             $result['is_archived']
         );
     }

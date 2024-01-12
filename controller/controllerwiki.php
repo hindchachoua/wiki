@@ -16,10 +16,13 @@ class WikiController
     public function showWikiPage($wikiId)
     {
         $wikiDAO = new WikiDAO();
-        $tags = $this->wikiDAO->getTagsByWikiId($wikiId);
-        $wiki = $wikiDAO->getWikiById($wikiId);
+        $latestWikis = $this->wikiDAO->getLatestWikis();
+        $latestTags = $this->tagDAO->getLatestTags();
 
-        include_once 'view\wiki\SingleWikiPage.php';
+
+        // print_r($latestWikis);
+
+        include_once 'view\pages\latestwiki.php';
     }
     public function adminIndex()
     {
@@ -33,7 +36,7 @@ class WikiController
         $wikiDAO = new WikiDAO();
         $wikis = $wikiDAO->getAllWikisForCrud();
 
-        include 'app/views/wiki/crud/author_index.php';
+        include '';
     }
     public function create()
     {
@@ -42,7 +45,7 @@ class WikiController
         $categories = $this->categoryDAO->getcategory();
 
         // Display the form to create a new wiki
-        include 'app/views/wiki/crud/create.php';
+        include '';
     }
 
     public function store()
@@ -67,7 +70,7 @@ class WikiController
 
                 if ($success) {
                     // Redirect to the index page or show a success message
-                    header('Location: index.php?action=author_wiki_table');
+                    header('');
                     exit();
                 } else {
                     // Handle the case where the creation failed
@@ -96,7 +99,7 @@ class WikiController
         $tags = $this->tagDAO->getAllTags();
 
         // Include the view for editing an existing wiki
-        include 'app/views/wiki/crud/edit.php';
+        include '';
     }
 
     public function update($wikiId)
@@ -118,7 +121,7 @@ class WikiController
 
             if ($success) {
                 // Redirect to the index page or show a success message
-                header('Location: index.php?action=author_wiki_table');
+                header('');
                 exit();
             } else {
                 // Handle the case where the update failed
@@ -134,7 +137,7 @@ class WikiController
 
         if ($success) {
             // Redirect to the index page or show a success message
-            header('Location: index.php?action=admin_wiki_table');
+            header('');
             exit();
         } else {
             // Handle the case where disabling failed
@@ -149,7 +152,7 @@ class WikiController
 
         if ($success) {
             // Redirect to the index page or show a success message
-            header('Location: index.php?action=admin_wiki_table');
+            header('');
             exit();
         } else {
             // Handle the case where disabling failed
@@ -162,7 +165,7 @@ class WikiController
         $wiki = $this->wikiDAO->getWikiById($wikiId);
 
         if ($wiki) {
-            include_once 'app/views/wiki/crud/author_wiki_table.php';
+            include_once '';
         } else {
             // Handle the case where the wiki is not found
             echo "Wiki not found.";
@@ -178,7 +181,7 @@ class WikiController
 
             if ($success) {
                 // Redirect to the index page or show a success message
-                header('Location: index.php?action=wiki_table');
+                header('');
                 exit();
             } else {
                 // Handle the case where disabling failed

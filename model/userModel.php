@@ -9,13 +9,15 @@ class user{
     private $email;
     private $password;
     private $registration_date;
+    private $role;
 
-    public function __construct($author_id, $author_name, $email, $password, $registration_date){
+    public function __construct($author_id, $author_name, $email, $password, $registration_date, $role){
         $this->author_id = $author_id;
         $this->author_name = $author_name;
         $this->email = $email;
         $this->password = $password;
         $this->registration_date = $registration_date;
+        $this->role = $role;
     }
 
 
@@ -59,6 +61,10 @@ class user{
     {
         return $this->registration_date;
     }
+    public function getRole()
+    {
+        return $this->role;
+    }
 }
 
 class userDAO{
@@ -68,18 +74,22 @@ class userDAO{
         $this->db = Database::getInstance()->getConnection();
 
     }
-    public function getUser(){
-        $sql = "SELECT * FROM users";
-        $stmt = $this->db->query($sql);
+    public function getUser($email, $password){
+        $sql = "SELECT * FROM users WHERE email = :email AND password = :password";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $password);
         $stmt->execute();
+    
         $resultdata = $stmt->fetchAll();
         $results = array();
-
+    
         foreach($resultdata as $data){
-            $results[] = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date']);
+            $results[] = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date'], $data['role']);
         }
         return $results;
     }
+    
 
     public function getUserByEmail($email){
         $sql = "SELECT * FROM users WHERE email = '$email'";
@@ -87,7 +97,7 @@ class userDAO{
         $stmt->execute();
         $resultdata = $stmt->fetchAll();
         foreach($resultdata as $data){
-            $result = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date']);
+            $result = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date'], $data['role']);
         }
         return $result;
     }
@@ -98,7 +108,7 @@ class userDAO{
         $stmt->execute();
         $resultdata = $stmt->fetchAll();
         foreach($resultdata as $data){
-            $result = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date']);
+            $result = new user($data['author_id'], $data['author_name'], $data['email'], $data['password'], $data['registration_date'], $data['role']);
         }
         return $result;
     }
@@ -107,8 +117,15 @@ class userDAO{
         $sql = "INSERT INTO users (author_name, email, password) VALUES ('$author_name', '$email', '$password')";
         $stmt = $this->db->query($sql);
         $stmt->execute();
+        header('Location: index.php?action=login');
+        exit();
 
     }
+
+    /**
+     * Get the value of role
+     */ 
+ 
 }
 // $var = 'haha';
 // $em = 'haha@gmail.com';

@@ -21,20 +21,20 @@ class AuthController
 
             $result = $this->authDAO->getUser($email, $password);
 
-            if ($result['success']) {
-                // Get user information, including the role and user_id
-                $user = $this->authDAO->getUserByEmail($email);
 
-                $_SESSION['user_id'] = $user->getId();  // Assuming getId() is the method to retrieve the user_id
-                $_SESSION['user'] = $user;
+            if (!empty($result))  {
+              
+
+                $_SESSION['user_id'] = $result[0]->getauthor_id();  // Assuming getId() is the method to retrieve the user_id
+                $_SESSION['user'] = $result[0]->getauthor_id();
                 if (isset($_SESSION['user'])) {
-                    $role = $_SESSION['user']->getRole();
+                    $role = $result[0]->getRole();
 
                     switch ($role) {
                         case 'Admin':
                             header('Location: index.php?action=admin');
                             break;
-                        case 'Author':
+                        case 'auteur':
                             header('Location: index.php?action=author');
 
                             break;
@@ -67,15 +67,9 @@ class AuthController
 
             $result = $this->authDAO->insertuser($username, $email, $password);
 
-            if ($result['success']) {
-                // Registration successful, redirect to login page
-                header('Location: index.php?action=login');
-                exit();
-            } else {
-                // Registration failed, display error message
-                $errorMessage = $result['message'];
-                include_once 'view/pages/sign-up.php';
-            }
+       
+        
+     
         }
     }
 

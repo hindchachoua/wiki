@@ -1,5 +1,8 @@
 
-<?php include 'view\pages\layout.php' ?>
+<?php include 'view\pages\layout.php' 
+
+?>
+
 
 <body class="bg-gray-200">
   <div class="container position-sticky z-index-sticky top-0">
@@ -90,25 +93,21 @@
                 </div>
               </div>
               <div class="card-body">
-                <form action="post" role="form" class="text-start">
+                <form action="index.php?action=login_execute" role="form" class="text-start" method="post">
                   <div class="input-group input-group-outline my-3">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email">
+                    <input type="email" class="form-control" id="email" name="email" required>
                   </div>
                   <div class="input-group input-group-outline mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password">
-                  </div>
-                  <div class="form-check form-switch d-flex align-items-center mb-3">
-                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                    <label class="form-check-label mb-0 ms-3" for="rememberMe">Remember me</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
                   </div>
                   <div class="text-center">
                     <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
                   </div>
                   <p class="mt-4 text-sm text-center">
                     Don't have an account?
-                    <a href="../pages/sign-up.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
+                    <a href="index.php?action=register" class="text-primary text-gradient font-weight-bold">Sign up</a>
                   </p>
                 </form>
               </div>

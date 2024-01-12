@@ -67,12 +67,20 @@ class categoryDAO{
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $resultdata = $stmt->fetch();
-        foreach($resultdata as $data){
-            $result = new category($data['category_id'], $data['category_name'], $data['description']);
+        
+        // Use fetch(PDO::FETCH_ASSOC) to get an associative array
+        $resultdata = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        // Check if data is not empty before creating the object
+        if ($resultdata) {
+            $result = new category($resultdata['category_id'], $resultdata['category_name'], $resultdata['description']);
+            return $result;
         }
-        return $result;
+    
+        // Return null or handle the case where data is not found
+        return null;
     }
+    
 
     public function insertcategory($category_name, $description){
         $sql = "INSERT INTO categories (category_name, description) VALUES (:category_name, :description)";
@@ -113,7 +121,7 @@ class categoryDAO{
                 $row['description'], 
                 $row['created_at']);
         }
-        return $result;
+        return $categories;
     }
 
 

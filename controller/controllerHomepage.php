@@ -19,9 +19,12 @@ class HomePageController
         $latestWikis = $this->wikiDAO->getLatestWikis();
         // Get latest categories
         $latestCategories = $this->categoryDAO->getLatestCategories();
+
+        // print_r($latestCategories);
+
         // Get latest tags
         $latestTags = $this->tagDAO->getLatestTags();
-        include "app/views/HomePage.php";
+        include "view\pages\homepage.php";
     }
 
     public function liveSearch()

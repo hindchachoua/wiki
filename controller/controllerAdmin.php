@@ -22,7 +22,7 @@ class AdminController
         $wikiCount = $this->wikiDAO->getWikiCount();
 
 
-        include_once 'view\admin\AdminPage.php';
+        include_once 'view\pages\homepage.php';
     }
 }
 

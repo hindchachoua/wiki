@@ -9,12 +9,7 @@ class CategoryController
         $this->categoryDAO = new CategoryDAO();
     }
 
-    public function showLatestCategories($limit)
-    {
-        $latestCategories = $this->categoryDAO->getLatestCategories($limit);
-
-        include_once 'app/views/category/LatestCategoriesPage.php';
-    }
+ 
 
     public function showAllCategories()
     {
@@ -34,8 +29,11 @@ class CategoryController
         $wikiDAO = new WikiDAO(); // Adjust this based on your actual class instantiation
         $relatedWikis = $wikiDAO->getwikibycategoryid($categoryId);
 
-        // Pass the variables to the view
-        include_once 'app/views/category/CategoryPage.php';
+        $categoryDAO = new CategoryDAO();
+        $latestCategories = $categoryDAO->getLatestCategories();
+
+      
+        include_once 'view\pages\latestcategory.php';
     }
     public function index()
     {

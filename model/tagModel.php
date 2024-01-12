@@ -120,20 +120,22 @@ class tagDAO{
     public function getLatestTags($limit = 5)
     {
         $query = "SELECT * FROM tags ORDER BY created_at DESC LIMIT " . (int) $limit;
-
+    
         $stmt = $this->db->prepare($query);
-
+        $stmt->execute();
+    
         $tags = [];
-        foreach ($stmt as $tagData) {
-            $tags[] = new Tag(
+        while ($tagData = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $tags[] = new tag(
                 $tagData['tag_id'],
                 $tagData['tag_name'],
                 $tagData['created_at']
             );
         }
-
+    
         return $tags;
     }
+    
     public function getTagCount()
 {
     $sql = "SELECT COUNT(*) as count FROM tags";

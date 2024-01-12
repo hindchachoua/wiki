@@ -32,7 +32,9 @@ if (isset($_GET['action'])) {
             break;
         case 'wiki':
             $controller = new WikiController();
-            $controller->showWikiPage($_GET['id']);
+            $wikiId = isset($_GET['id']) ? $_GET['id'] : null;
+
+            $controller->showWikiPage($wikiId);
             break;
         case 'admin_wiki_table':
             $controller = new WikiController();
@@ -76,7 +78,8 @@ if (isset($_GET['action'])) {
             break;
         case 'category':
             $controller = new CategoryController();
-            $controller->showCategoryPage($_GET['id']);
+            $categoryid = isset($_GET['id']) ? $_GET['id'] : null;
+            $controller->showCategoryPage($categoryid);
             break;
         case 'category_table':
             $controller = new CategoryController();

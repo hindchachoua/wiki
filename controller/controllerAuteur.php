@@ -20,7 +20,7 @@ class AuthorController
         $wikiCount = $this->wikiDAO->getWikiCount();
 
 
-        include_once 'app/views/author/AuthorPage.php';
+        include_once 'view\pages\latestcategory.php';
     }
 }
 
